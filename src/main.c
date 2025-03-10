@@ -1,8 +1,11 @@
 #include "comm/Common.h"
-#include "some/ok.h"
+#include "bufferObjects/vec3d.h"
 
 int main()
 {
-  DoOk();
-  printf("asdasd\n");
+  vec3d a;
+  a.x = 3;
+  a.y = 4;
+  a.z = 5;
+  printf("%f\n", a.y);
 }
