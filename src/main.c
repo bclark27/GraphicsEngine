@@ -64,8 +64,8 @@ int main()
   VAO* vao1 = VAO_create();
   VAO_bind(vao1);
 
-  VBO* vbo1 = VBO_create(vertices, 18);
-  EBO* ebo1 = EBO_create(indices, 9);
+  VBO* vbo1 = VBO_create(vertices, sizeof(vertices));
+  EBO* ebo1 = EBO_create(indices, sizeof(indices));
 
   VAO_link(vao1, vbo1, 0);
 
@@ -73,6 +73,7 @@ int main()
   VBO_unbind(vbo1);
   EBO_unbind(ebo1);
 
+  printf("%d, %d, %d\n", vao1->ID, vbo1->ID, ebo1->ID);
 
   while (!glfwWindowShouldClose(window))
   {

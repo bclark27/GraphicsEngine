@@ -35,7 +35,7 @@ void VAO_link(VAO* vao, VBO* vbo, GLuint layout)
   if (!vao || !vbo)
     return;
 
-  VBO_unbind(vbo);
+  VBO_bind(vbo);
 
   glVertexAttribPointer(layout, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
   glEnableVertexAttribArray(layout);
@@ -43,7 +43,7 @@ void VAO_link(VAO* vao, VBO* vbo, GLuint layout)
   vao->curr_vbo = vbo->ID;
   vao->curr_layout = layout;
 
-  VBO_bind(vbo);
+  VBO_unbind(vbo);
 }
 
 void VAO_bind(VAO* vao)
