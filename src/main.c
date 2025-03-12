@@ -73,7 +73,6 @@ int main()
   VBO_unbind(vbo1);
   EBO_unbind(ebo1);
 
-  printf("%d, %d, %d\n", vao1->ID, vbo1->ID, ebo1->ID);
 
   while (!glfwWindowShouldClose(window))
   {
@@ -82,7 +81,6 @@ int main()
 
     shader_activate(shad);
     VAO_bind(vao1);
-    printf("ASDASD\n");
     glDrawElements(GL_TRIANGLES, 9, GL_UNSIGNED_INT, 0);
 
     glfwSwapBuffers(window);
