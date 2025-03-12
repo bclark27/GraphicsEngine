@@ -10,6 +10,7 @@ BIN_PATH := bin
 OBJ_PATH := obj
 SRC_PATH := src
 DBG_PATH := debug
+SHADERS_SUB_DIR := shaders
 
 # compile macros
 TARGET_NAME := ge# FILL: target name
@@ -29,7 +30,8 @@ DISTCLEAN_LIST := $(OBJ) \
                   $(OBJ_DEBUG)
 CLEAN_LIST := $(TARGET) \
 			  $(TARGET_DEBUG) \
-			  $(DISTCLEAN_LIST)
+			  $(DISTCLEAN_LIST) \
+				$(BIN_PATH)/$(SHADERS_SUB_DIR)
 
 # default rule
 default: makedir all
@@ -37,6 +39,9 @@ default: makedir all
 # non-phony targets
 $(TARGET): $(OBJ)
 	$(CC) $(CCFLAGS) -o $@ $(OBJ) $(LIBS)
+	@mkdir -p $(dir $@)
+	@echo "cp shaders"
+	@cp -r $(SRC_PATH)/$(SHADERS_SUB_DIR) $(BIN_PATH)
 
 $(OBJ_PATH)/%.o: $(SRC_PATH)/%.c*
 	@mkdir -p $(dir $@)
@@ -62,7 +67,7 @@ debug: $(TARGET_DEBUG)
 .PHONY: clean
 clean:
 	@echo CLEAN $(CLEAN_LIST)
-	@rm -f $(CLEAN_LIST)
+	@rm -rf $(CLEAN_LIST)
 
 .PHONY: distclean
 distclean:
