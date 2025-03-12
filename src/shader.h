@@ -10,11 +10,11 @@
 
 typedef struct shader
 {
-  GLuint shaderProgram;
+  GLuint ID;
 } shader;
 
-shader* shader_createShader(const char* vertexShaderFile, const char* fragShaderFile);
+shader* shader_init(const char* vertexShaderFile, const char* fragShaderFile);
 void shader_activate(shader* s);
-void shader_destroyShader(shader* s);
+void shader_free(shader* s);
 
 #endif

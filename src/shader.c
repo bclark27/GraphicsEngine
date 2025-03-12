@@ -33,7 +33,7 @@ const char* read_file(const char *filename) {
     return (const char*)buffer;
 }
 
-shader* shader_createShader(const char* vertexShaderFile, const char* fragShaderFile)
+shader* shader_init(const char* vertexShaderFile, const char* fragShaderFile)
 {
   const char* vShaderSrc = read_file(vertexShaderFile);
   if (!vShaderSrc)
@@ -66,7 +66,7 @@ shader* shader_createShader(const char* vertexShaderFile, const char* fragShader
   free((void*)fragShaderSrc);
 
   shader* s = malloc(sizeof(shader));
-  s->shaderProgram = shaderProg;
+  s->ID = shaderProg;
 
   return s;
 
@@ -74,13 +74,13 @@ shader* shader_createShader(const char* vertexShaderFile, const char* fragShader
 
 void shader_activate(shader* s)
 {
-  glUseProgram(s->shaderProgram);
+  glUseProgram(s->ID);
 }
 
-void shader_destroyShader(shader* s)
+void shader_free(shader* s)
 {
   if (!s)
     return;
 
-  glDeleteProgram(s->shaderProgram);
+  glDeleteProgram(s->ID);
 }

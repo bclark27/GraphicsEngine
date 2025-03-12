@@ -3,9 +3,16 @@
 #include "comm/Common.h"
 
 #include "shader.h"
+#include "VAO.h"
+#include "VBO.h"
+#include "EBO.h"
+
+
 
 #define HEIGHT  (480)
 #define WIDTH   (640)
+
+
 
 int main()
 {
@@ -33,58 +40,59 @@ int main()
     return -1;
   }
 
-  GLfloat vertices[] = {
-    1.0f, 1.0f, 0.0f,
-    -1.0f, -1.0f, 0.0f,
-    1.0f, -1.0f, 0.0f
+  // Vertices coordinates
+  GLfloat vertices[] =
+  {
+  	-0.5f, -0.5f * (float)(sqrt(3)) / 3, 0.0f, // Lower left corner
+  	0.5f, -0.5f * (float)(sqrt(3)) / 3, 0.0f, // Lower right corner
+  	0.0f, 0.5f * (float)(sqrt(3)) * 2 / 3, 0.0f, // Upper corner
+  	-0.5f / 2, 0.5f * (float)(sqrt(3)) / 6, 0.0f, // Inner left
+	  0.5f / 2, 0.5f * (float)(sqrt(3)) / 6, 0.0f, // Inner right
+	  0.0f, -0.5f * (float)(sqrt(3)) / 3, 0.0f // Inner down
   };
 
- 
-  shader* shad = shader_createShader("shaders/default.vert", "shaders/default.frag");
+  // Indices for vertices order
+  GLuint indices[] =
+  {
+  	0, 3, 5, // Lower left triangle
+  	3, 2, 4, // Lower right triangle
+  	5, 4, 1 // Upper triangle
+  };
 
-  GLuint VBO, VAO;
+  shader* shad = shader_init("shaders/default.vert", "shaders/default.frag");
 
-  glGenVertexArrays(1, &VAO);
-  glGenBuffers(1, &VBO);
+  VAO* vao1 = VAO_create();
+  VAO_bind(vao1);
 
-  glBindVertexArray(VAO);
-  glBindBuffer(GL_ARRAY_BUFFER, VBO);
-  
-  glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 9, vertices, GL_STATIC_DRAW);
+  VBO* vbo1 = VBO_create(vertices, 18);
+  EBO* ebo1 = EBO_create(indices, 9);
 
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 3, (void*)0);
-  glEnableVertexAttribArray(0);
+  VAO_link(vao1, vbo1, 0);
 
-  glBindBuffer(GL_ARRAY_BUFFER, 0);
-  glBindVertexArray(0);
+  VAO_unbind(vao1);
+  VBO_unbind(vbo1);
+  EBO_unbind(ebo1);
 
-
-
-
-
-  glViewport(0, 0, WIDTH, HEIGHT);
-
-  glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
-  glClear(GL_COLOR_BUFFER_BIT);
-  glfwSwapBuffers(window);
 
   while (!glfwWindowShouldClose(window))
   {
     glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
+
     shader_activate(shad);
-    glBindVertexArray(VAO);
-    glDrawArrays(GL_TRIANGLES, 0, 3);
+    VAO_bind(vao1);
+    printf("ASDASD\n");
+    glDrawElements(GL_TRIANGLES, 9, GL_UNSIGNED_INT, 0);
 
     glfwSwapBuffers(window);
-
     glfwPollEvents();
   }
 
-  glDeleteVertexArrays(1, &VAO);
-  glDeleteBuffers(1, &VBO);
-  shader_destroyShader(shad);
 
+  VAO_free(vao1);
+  VBO_free(vbo1);
+  EBO_free(ebo1);
+  shader_free(shad);
 
   glfwDestroyWindow(window);
   glfwTerminate();
